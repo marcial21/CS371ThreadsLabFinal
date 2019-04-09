@@ -20,10 +20,13 @@ public class StarAnimation extends Animation {
 
     /* when this is set to 'false' the next animation frame won't twinkle */
     private boolean twinkle = true;
+    private Starlord controller;
 
     /** ctor expects to be told the size of the animation canvas */
     public StarAnimation(int initWidth, int initHeight) {
         super(initWidth, initHeight);
+        controller = new Starlord(this);
+        controller.start();
     }
 
     /** whenever the canvas size changes, generate new stars */
@@ -39,7 +42,7 @@ public class StarAnimation extends Animation {
     }
 
     /** adds a randomly located star to the field */
-    public void addStar() {
+    public synchronized void addStar() {
         //Ignore this call if the canvas hasn't been initialized yet
         if ((width <= 0) || (height <= 0)) return;
 
@@ -51,7 +54,8 @@ public class StarAnimation extends Animation {
     }//addStar
 
     /** removes a random star from the field */
-    public void removeStar() {
+    public synchronized void removeStar() {
+
         if (field.size() > 100) {
             int index = rand.nextInt(field.size());
             field.remove(index);
@@ -61,21 +65,43 @@ public class StarAnimation extends Animation {
     /** draws the next frame of the animation */
     @Override
     public void draw(Canvas canvas) {
-        for (Star s : field) {
-            s.draw(canvas);
-            if (this.twinkle) {
-                s.twinkle();
+        synchronized (this) {
+
+            for (Star s : field) {
+                s.draw(canvas);
+                if (this.twinkle) {
+                    s.twinkle();
+                }
             }
         }
-
         this.twinkle = true;
+
     }//draw
 
     /** the seekbar progress specifies the brightnes of the stars. */
     @Override
     public void progressChange(int newProgress) {
+        /*
         int brightness = 255 - (newProgress * 2);
         Star.starPaint.setColor(Color.rgb(brightness, brightness, brightness));
+        this.twinkle = false;
+        */
+        int fieldSize = field.size();
+        newProgress = newProgress *10;
+
+        if(newProgress > fieldSize){
+            int n = newProgress-fieldSize;
+            for(int i = 0; i<n; i++){
+                addStar();
+            }
+        }
+        else{
+            int n = fieldSize-newProgress;
+            for(int i=0; i<n; i++){
+                removeStar();
+            }
+        }
+
         this.twinkle = false;
     }
 }//class StarAnimation

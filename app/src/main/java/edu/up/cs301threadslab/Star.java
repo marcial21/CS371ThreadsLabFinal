@@ -74,6 +74,7 @@ public class Star {
      *            is the canvas to draw upon
      */
     public void draw(Canvas canvas) {
+
         canvas.drawCircle(x, y, size, myPaint);
     }
 }// class Star

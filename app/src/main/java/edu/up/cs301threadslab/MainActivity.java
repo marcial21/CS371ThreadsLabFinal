@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.SeekBar;
 
 /**
@@ -19,6 +18,7 @@ public class MainActivity extends Activity
     private AnimationView myAV;
     private Button theButton;
     private SeekBar theSeekBar;
+    private AnimeThread myObject;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,11 +36,16 @@ public class MainActivity extends Activity
         //Let me know when someone adjusts the seekbar
         theSeekBar = (SeekBar)findViewById(R.id.seekBar);
         theSeekBar.setOnSeekBarChangeListener(this);
+
+        myObject = new AnimeThread(myAV);
+        myObject.start();
     }//onClick
 
     @Override
     public void onClick(View v) {
         myAV.postInvalidate();
+
+
     }
 
     @Override
@@ -51,7 +56,11 @@ public class MainActivity extends Activity
 
     /** These two methods aren't used */
     @Override
-    public void onStartTrackingTouch(SeekBar seekBar) {}
+    public void onStartTrackingTouch(SeekBar seekBar) {
+
+    }
     @Override
-    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {}
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+    }
 }

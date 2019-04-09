@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.SurfaceView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -16,7 +17,7 @@ import java.util.ArrayList;
  * @author Andrew Nuxoll
  * @version Fall 2015
  */
-public class AnimationView extends SurfaceView{
+public class AnimationView extends SurfaceView implements Serializable{
     // track the current dimensions of this surface view
     private int width;
     private int height;
